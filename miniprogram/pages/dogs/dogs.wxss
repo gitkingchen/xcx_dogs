@@ -1,0 +1,7 @@
+.card-demo{
+	margin-bottom:30rpx !important;
+}
+
+.card-demo image {
+  border-radius: 50%;  
+}
