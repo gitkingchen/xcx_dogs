@@ -37,9 +37,10 @@
 					"query": ""
 				},
 				{
-					"id": -1,
-					"name": "dogs",
-					"pathName": "pages/dogs/dogs"
+					"id": 1,
+					"name": "mine",
+					"pathName": "pages/mine/mine",
+					"query": ""
 				}
 			]
 		}
