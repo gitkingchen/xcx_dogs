@@ -1,0 +1,19 @@
+<view>
+	<!-- <wux-divider position="left" text="Wux Weapp" /> -->
+	<wux-cell-group title="带图标、说明的列表项">
+        <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="标题文字">
+        	<view slot="footer"><input type="text" style="text-align:left;" placeholder="昵称" /></view>
+        </wux-cell>
+        <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="标题文字">
+        	<view slot="footer"><input type="text" style="text-align:left;" placeholder="号码" /></view>
+        </wux-cell>
+        
+        
+    </wux-cell-group>
+
+
+
+
+
+
+</view>
