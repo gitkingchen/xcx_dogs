@@ -3,6 +3,7 @@
 	"usingComponents": {
         "wux-divider": "../../components/divider/index",
         "wux-cell-group": "../../components/cell-group/index",
-        "wux-cell": "../../components/cell/index"
+        "wux-cell": "../../components/cell/index",
+        "wux-select": "../../components/select/index"
     }
 }

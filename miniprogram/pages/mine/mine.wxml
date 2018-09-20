@@ -2,14 +2,48 @@
 	<!-- <wux-divider position="left" text="Wux Weapp" /> -->
 	<wux-cell-group title="带图标、说明的列表项">
         <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="标题文字">
-        	<view slot="footer"><input type="text" style="text-align:left;" placeholder="昵称" /></view>
+        	<view slot="footer"><input type="text" style="text-align:left;" placeholder="ni" /></view>
         </wux-cell>
         <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="标题文字">
-        	<view slot="footer"><input type="text" style="text-align:left;" placeholder="号码" /></view>
+        	<view slot="footer"><input type="text" style="text-align:left;" placeholder="hao" /></view>
         </wux-cell>
-        
+        <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="sheng">
+        	<view slot="footer">
+	        	<picker mode="date" value="{{date}}" bindchange="bindDateChange">
+				    {{date}}
+				</picker>
+			</view>
+        </wux-cell>
+        <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="gao">
+        	<view slot="footer">
+	        	<picker mode="selector" range="{{heightArr}}" bindchange="bindHeightChange">
+				    {{height}}
+				</picker>
+			</view>
+        </wux-cell>
+        <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="ti">
+        	<view slot="footer">
+	        	<picker mode="selector" range="{{weightArr}}" value="{{weightIndex}}" range-key="name" bindchange="bindWeightChange">
+				    {{weightArr[weightIndex].name}}
+				</picker>
+			</view>
+        </wux-cell>
+        <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="xing">
+        	<view slot="footer">
+	        	<picker mode="selector" range="{{starArr}}" value="{{starIndex}}" range-key="name" bindchange="bindStarChange">
+				    {{starArr[starIndex].name}}
+				</picker>
+			</view>
+        </wux-cell>
+
+
+
+
+        <!-- <wux-cell title="手机" extra="{{ title2 }}" bind:click="onClick2"></wux-cell> -->
         
     </wux-cell-group>
+    <!-- <wux-select id="wux-select1" />
+    <wux-select id="wux-select2" /> -->
 
 
 

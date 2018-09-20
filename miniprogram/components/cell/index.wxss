@@ -28,7 +28,7 @@
   display: none;
 }
 .wux-cell--hover {
-  background-color: #ECECEC;
+  /*background-color: #ECECEC;*/
 }
 .wux-cell__thumb {
   display: block;
