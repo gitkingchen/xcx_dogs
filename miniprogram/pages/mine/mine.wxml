@@ -36,14 +36,37 @@
 			</view>
         </wux-cell>
 
+        <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="jiaxiang">
+        	<view slot="footer">
+	        	<picker mode="region" bindchange="bindHomeChange">
+				    {{homeVal}}
+				</picker>
+			</view>
+        </wux-cell>
 
+        <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="gongzuo">
+        	<view slot="footer">
+	        	<picker mode="region" bindchange="bindWorkChange">
+				    {{workVal}}
+				</picker>
+			</view>
+        </wux-cell>
 
+        <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="juzhu">
+        	<view slot="footer">
+	        	<picker mode="region" bindchange="bindStayChange">
+				    {{stayVal}}
+				</picker>
+			</view>
+        </wux-cell>
 
-        <!-- <wux-cell title="手机" extra="{{ title2 }}" bind:click="onClick2"></wux-cell> -->
-        
+        <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="爱好" extra="{{ hobbyTitle }}" bind:click="onClick">
+        </wux-cell>
+        <wux-select id="wux-select" />
+        <wux-button block size="default" type="balanced">提交</wux-button>
     </wux-cell-group>
-    <!-- <wux-select id="wux-select1" />
-    <wux-select id="wux-select2" /> -->
+    
+    
 
 
 

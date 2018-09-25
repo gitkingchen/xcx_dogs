@@ -39,6 +39,7 @@ Page({
         b: 2
       },
       success: res => {
+        console.log(res)
         wx.showToast({
           title: '调用成功',
         })

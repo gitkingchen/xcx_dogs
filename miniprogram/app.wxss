@@ -1,7 +1,10 @@
 /**app.wxss**/
-.container {
+/*.container {
   display: flex;
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-} 
+} */
+
+@import 'style/weui.wxss';
+@import 'style/skyvow.wxss';
