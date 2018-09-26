@@ -1,19 +1,27 @@
 import { $wuxSelect } from '../../components/index';
+const db = wx.cloud.database();
 Page({
   data: {
-      hobbyVal: '',
-      hobbyTitle: '',
-      date:'请选择',
-      
-      height:'请选择',
+      form:{
+        nickname:'',
+        wxnumber:'',
+        date:'1990-01-01',
+        weight:'',
+        star:'',
+        home:[],
+        work:[],
+        stay:[],
+        hobbyVal: [],
+      },
+
+      heightIndex:10,
       heightArr:[],
       
       weightIndex:1,
       weightArr:[{
         name:'shou',
         value:0
-      },
-      {
+      },{
         name:'pang',
         value:1
       }],
@@ -22,8 +30,7 @@ Page({
       starArr:[{
         name:'白',
         value:0
-      },
-      {
+      },{
         name:'牛',
         value:1
       }],
@@ -34,12 +41,13 @@ Page({
   },
   bindDateChange: function (e) {
     this.setData({
-      date: e.detail.value
+      'form.date': e.detail.value
     })
   },
   bindHeightChange: function (e) {
+    this.data.heightIndex = e.detail.value;
     this.setData({
-      height: this.data.heightArr[e.detail.value]+'cm'
+      heightIndex:e.detail.value
     })
   },
   bindWeightChange: function (e) {
@@ -68,48 +76,53 @@ Page({
       stayVal: e.detail.value
     })
   },
-  onClick() {
-      $wuxSelect('#wux-select').open({
-          value: this.data.hobbyVal,
-          multiple: true,
-          toolbar: {
-              title: 'Please choose',
-              confirmText: 'ok',
-          },
-          options: [{
-                  title: '画画',
-                  value: '1',
-              },
-              {
-                  title: '打球',
-                  value: '2',
-              },
-              {
-                  title: '唱歌',
-                  value: '3',
-              },
-              {
-                  title: '游泳',
-                  value: '4',
-              },
-              {
-                  title: '健身',
-                  value: '5',
-              },
-              {
-                  title: '睡觉',
-                  value: '6',
-              },
-          ],
-          onConfirm: (value, index, options) => {
-              this.setData({
-                  hobbyVal: value,
-                  hobbyTitle: index.map((n) => options[n].title),
-              })
-          },
-      })
-    },
+  hobbyChange() {
+    $wuxSelect('#hobby-select').open({
+        value: this.data.form.hobbyVal,
+        multiple: true,
+        toolbar: {
+            title: '请选择',
+            confirmText: '完成',
+        },
+        options: [{
+            title: '画画',
+            value: '画画',
+        },{
+            title: '打球',
+            value: '打球',
+        }],
+        onConfirm: (value, index, options) => {
+            this.data.form.hobbyVal = value;
+            this.setData({
+              'form.hobbyVal': value,
+              //hobbyTitle: index.map((n) => options[n].title),
+            })
+        },
+    })
+  },
+  onSubmit:function(e){//提交
+    var params = e.detail.value;
+    params['hobbyVal'] = this.data.form.hobbyVal;
+    params['height'] = this.data.heightArr[this.data.heightIndex];
+    console.log('params',params)
+    //return;
+    db.collection('users').add({
+      data: params,
+      success: res => {
+        wx.showToast({
+          title: '提交成功',
+        });
 
+      },
+      fail: err => {
+        wx.showToast({
+          icon: 'none',
+          title: '提交失败'
+        });
+      }
+    })
+
+  },
   /**
    * 生命周期函数--监听页面加载
    */
