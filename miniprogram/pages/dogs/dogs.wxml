@@ -1,6 +1,6 @@
 <view>
-	<i-card title="标题" extra="" thumb="https://i.loli.net/2017/08/21/599a521472424.jpg" i-class="card-demo">
-	    <view slot="content">内容不错</view>
+	<i-card wx:for="{{dogs}}" wx:key="_id" title="{{item.nickname}}|{{item.date}}|{{item.height}}" extra="" thumb="https://i.loli.net/2017/08/21/599a521472424.jpg" i-class="card-demo">
+	    <view slot="content">{{item.stay[0]}}</view>
 	    <!-- <view slot="footer">尾部内容</view> -->
 	</i-card>
 </view>
