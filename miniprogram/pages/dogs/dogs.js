@@ -1,24 +1,39 @@
-// miniprogram/pages/dogs/dogs.js
+import { $stopWuxRefresher } from '../../components/index';
 const db = wx.cloud.database();
+const MAX_LIMIT = 5;
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-    
+    dogs:[],
+    pageNum:1,
+    isLoading:false
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
+  onRefresh() {
+      db.collection('users').limit(MAX_LIMIT).get({
+        success: res => {
+          this.data.pageNum = 1;
+          this.data.dogs = res.data;
+          this.setData({
+             dogs:this.data.dogs
+          });
+          $stopWuxRefresher();
+        },
+        fail: err => {
+          wx.showToast({
+            icon: 'none',
+            title: '查询记录失败'
+          })
+        }
+      });
+  },
   onLoad: function (options) {
-    db.collection('users').limit(5).get({
+
+    db.collection('users').limit(MAX_LIMIT).get({
       success: res => {
-        console.log(res)
+        this.data.dogs = res.data;
         this.setData({
-          dogs: res.data
-        })
+           dogs:this.data.dogs,
+        });
       },
       fail: err => {
         wx.showToast({
@@ -26,34 +41,33 @@ Page({
           title: '查询记录失败'
         })
       }
-    })
-  },
+    });
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
+  },
   onReady: function () {
 
   },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
   onReachBottom: function () {
-
+    // if(this.data.isLoading){return;}
+    // this.data.isLoading = true;
+    db.collection('users').skip(this.data.pageNum * MAX_LIMIT).limit(MAX_LIMIT).get({
+      success: res => {
+        this.data.pageNum++;
+        this.data.dogs = this.data.dogs.concat(res.data);
+        this.setData({
+           dogs:this.data.dogs,
+        });
+      },
+      fail: err => {
+        wx.showToast({
+          icon: 'none',
+          title: '查询记录失败'
+        })
+      },
+      complete: res => {
+        // this.data.isLoading = false;
+      }
+    })
   },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
+  onShareAppMessage: function () {}
 })

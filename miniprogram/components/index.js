@@ -25,7 +25,7 @@ const $wuxBackdrop = (selector = '#wux-backdrop', ctx) => getCtx(selector, ctx)
 // const $wuxKeyBoard = (selector = '#wux-keyboard', ctx) => getCtx(selector, ctx)
 const $wuxSelect = (selector = '#wux-select', ctx) => getCtx(selector, ctx)
 // const $wuxCalendar = (selector = '#wux-calendar', ctx) => getCtx(selector, ctx)
-// const $stopWuxRefresher = (selector = '#wux-refresher', ctx) => getCtx(selector, ctx).finishPullToRefresh()
+const $stopWuxRefresher = (selector = '#wux-refresher', ctx) => getCtx(selector, ctx).finishPullToRefresh()
 
 export {
     $wuxBackdrop,
@@ -39,6 +39,6 @@ export {
     // $wuxNotification,
     // $wuxKeyBoard,
     // $wuxCalendar,
-    // $stopWuxRefresher,
+    $stopWuxRefresher,
     
 }
