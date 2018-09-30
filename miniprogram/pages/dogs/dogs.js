@@ -6,15 +6,13 @@ Page({
   data: {
     dogs:[],
     pageNum:1,
-    isLoading:false
   },
   onRefresh() {
       db.collection('users').limit(MAX_LIMIT).get({
         success: res => {
           this.data.pageNum = 1;
-          this.data.dogs = res.data;
           this.setData({
-             dogs:this.data.dogs
+            dogs:res.data
           });
           $stopWuxRefresher();
         },
@@ -30,9 +28,8 @@ Page({
 
     db.collection('users').limit(MAX_LIMIT).get({
       success: res => {
-        this.data.dogs = res.data;
         this.setData({
-           dogs:this.data.dogs,
+           dogs:res.data
         });
       },
       fail: err => {
@@ -48,14 +45,11 @@ Page({
 
   },
   onReachBottom: function () {
-    // if(this.data.isLoading){return;}
-    // this.data.isLoading = true;
     db.collection('users').skip(this.data.pageNum * MAX_LIMIT).limit(MAX_LIMIT).get({
       success: res => {
         this.data.pageNum++;
-        this.data.dogs = this.data.dogs.concat(res.data);
         this.setData({
-           dogs:this.data.dogs,
+          dogs:this.data.dogs.concat(res.data)
         });
       },
       fail: err => {
@@ -63,11 +57,13 @@ Page({
           icon: 'none',
           title: '查询记录失败'
         })
-      },
-      complete: res => {
-        // this.data.isLoading = false;
       }
     })
   },
   onShareAppMessage: function () {}
 })
+
+/*
+  改变自身数据 用this.data
+  需要视图改变 用setData
+ */

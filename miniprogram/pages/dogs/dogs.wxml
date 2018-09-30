@@ -1,5 +1,5 @@
 <wux-refresher id="wux-refresher" bind:refresh="onRefresh">
-    <i-card wx:for="{{dogs}}" wx:key="_id" title="{{item.nickname}}|{{item.date}}|{{item.height}}" extra="" thumb="https://i.loli.net/2017/08/21/599a521472424.jpg" i-class="card-demo">
+    <i-card wx:for="{{dogs}}" wx:key="_id" title="{{item.nickname}}|{{item.date}}|{{item.height}}" extra="" thumb="{{item.pictures[0].res.fileID}}" i-class="card-demo">
 	    <view slot="content">{{item.stay[0]}}</view>
 	    <!-- <view slot="footer">尾部内容</view> -->
 	</i-card>

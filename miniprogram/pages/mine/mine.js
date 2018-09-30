@@ -14,6 +14,24 @@ Page({
         hobbyVal: [],
       },
 
+      fileList: [
+          // {
+          //     uid: 0,
+          //     status: 'uploading',
+          //     url: 'http://pbqg2m54r.bkt.clouddn.com/qrcode.jpg',
+          // },
+          // {
+          //     uid: 1,
+          //     status: 'done',
+          //     url: 'http://pbqg2m54r.bkt.clouddn.com/qrcode.jpg',
+          // },
+          // {
+          //     uid: 2,
+          //     status: 'error',
+          //     url: 'http://pbqg2m54r.bkt.clouddn.com/qrcode.jpg',
+          // }
+      ],
+
       heightIndex:10,
       heightArr:[],
       
@@ -39,13 +57,63 @@ Page({
       workVal:'请选择',
       stayVal:'请选择',
   },
+
+  onChange(e) {
+      // console.log('onChange', e)
+      const { file } = e.detail
+      if (file.status === 'uploading') {
+          this.setData({
+              progress: 0,
+          })
+          wx.showLoading()
+      } else if (file.status === 'done') {
+          this.setData({
+              imageUrl: file.url,
+          })
+      }
+
+  },
+  onSuccess(e) {
+      console.log('onSuccess', e)
+      const { file, fileList } = e.detail
+      this.setData({
+          fileList: fileList
+      })
+  },
+  onFail(e) {
+      console.log('onFail', e)
+  },
+  onComplete(e) {
+      // console.log('onComplete', e)
+      wx.hideLoading()
+  },
+  onProgress(e) {
+      // console.log('onProgress', e)
+      this.setData({
+          progress: e.detail.file.progress,
+      })
+  },
+  onPreview(e) {
+      // console.log('onPreview', e)
+      const { file, fileList } = e.detail
+      wx.previewImage({
+          current: file.url,
+          urls: fileList.map((n) => n.url),
+      })
+  },
+  onRemove(e) {
+      const { file, fileList } = e.detail
+      this.setData({
+          fileList: fileList.filter((n) => n.uid !== file.uid),
+      })
+  },
   bindDateChange: function (e) {
     this.setData({
       'form.date': e.detail.value
     })
   },
   bindHeightChange: function (e) {
-    this.data.heightIndex = e.detail.value;
+    //this.data.heightIndex = e.detail.value;
     this.setData({
       heightIndex:e.detail.value
     })
@@ -104,6 +172,7 @@ Page({
     var params = e.detail.value;
     params['hobbyVal'] = this.data.form.hobbyVal;
     params['height'] = this.data.heightArr[this.data.heightIndex];
+    params['pictures'] = this.data.fileList;
     console.log('params',params)
     //return;
     db.collection('users').add({

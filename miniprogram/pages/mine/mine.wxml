@@ -1,6 +1,9 @@
 <view>
 	<!-- <wux-divider position="left" text="Wux Weapp" /> -->
     <form bindsubmit="onSubmit">
+        <wux-upload count="5" list-type="picture-card" file-list="{{ fileList }}" bind:change="onChange" bind:success="onSuccess" bind:fail="onFail" bind:complete="onComplete" bind:preview="onPreview" bind:remove="onRemove">
+            <text>上传</text>
+        </wux-upload>
     	<wux-cell-group title="带图标、说明的列表项">
             <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="标题文字">
             	<view slot="footer"><input name="nickname" type="text" style="text-align:left;" placeholder="ni" /></view>
