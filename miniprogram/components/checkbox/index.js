@@ -1,13 +1,25 @@
-import { isPresetColor } from '../helpers/colors'
+import baseComponent from '../helpers/baseComponent'
+import classNames from '../helpers/classNames'
 
-Component({
-    externalClasses: ['wux-class'],
+baseComponent({
     relations: {
         '../checkbox-group/index': {
             type: 'parent',
         },
     },
     properties: {
+        prefixCls: {
+            type: String,
+            value: 'wux-checkbox',
+        },
+        cellPrefixCls: {
+            type: String,
+            value: 'wux-cell',
+        },
+        selectablePrefixCls: {
+            type: String,
+            value: 'wux-selectable',
+        },
         title: {
             type: String,
             value: '',
@@ -27,6 +39,11 @@ Component({
         checked: {
             type: Boolean,
             value: false,
+            observer(newVal) {
+                this.setData({
+                    inputChecked: newVal,
+                })
+            },
         },
         disabled: {
             type: Boolean,
@@ -35,42 +52,42 @@ Component({
         color: {
             type: String,
             value: 'balanced',
-            observer(newVal) {
-                this.setData({
-                    checkboxColor: isPresetColor(newVal),
-                })
-            },
         },
     },
     data: {
         index: 0,
+        inputChecked: false,
+    },
+    computed: {
+        classes: ['prefixCls', function(prefixCls) {
+            const cell = classNames(prefixCls)
+            const selectable = `${prefixCls}__selectable`
+
+            return {
+                cell,
+                selectable,
+            }
+        }],
     },
     methods: {
-        checkboxChange() {
-            const { value, checked, index, disabled } = this.data
+        checkboxChange(e) {
+            const { value, index, disabled } = this.data
             const parent = this.getRelationNodes('../checkbox-group/index')[0]
             const item = {
-                checked: !checked,
+                checked: e.detail.checked,
                 value,
                 index,
             }
 
-            if (disabled) {
-                return false
-            }
+            if (disabled) return
 
-            parent ? parent.emitEvent(item) : this.triggerEvent('change', item)
+            parent ? parent.onChange(item) : this.triggerEvent('change', item)
         },
-        changeValue(checked = false, index = 0) {
+        changeValue(inputChecked = false, index = 0) {
             this.setData({
-                checked,
+                inputChecked,
                 index,
             })
         },
-    },
-    attached() {
-        this.setData({
-            checkboxColor: isPresetColor(this.data.color),
-        })
     },
 })

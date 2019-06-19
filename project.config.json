@@ -11,7 +11,7 @@
 	},
 	"appid": "wxc5f349e17988f915",
 	"projectname": "dogs",
-	"libVersion": "2.3.0",
+	"libVersion": "2.7.1",
 	"condition": {
 		"search": {
 			"current": -1,

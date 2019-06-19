@@ -1,0 +1,52 @@
+/* components/Dialog/dialog.wxss */
+.wx-dialog-mask{
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+}
+.wx-dialog{
+    position: fixed;
+    width: 89%;
+    /*height: 75.6%;*/
+    top: 31%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background-color: #FFFFFF;
+    border-radius:4rpx;
+    overflow: hidden;
+    z-index: 1500;
+}
+.wx-dialog-header{
+    font-size: 36rpx;
+    height: 70rpx;
+    line-height: 70rpx;
+}
+.wx-dialog-title{
+    text-align: center;
+    font-weight: bold;
+    font-size: 24rpx;
+    color: #303030;
+    letter-spacing: 1.8rpx;
+}
+.wx-dialog-body{
+    padding: 10rpx 30rpx 10rpx;
+    word-wrap: break-word;
+    word-break: break-all;
+    height: calc(100% - 300rpx);
+    background-color: #F6F6F6;
+    color: #545454;
+    overflow:auto;
+}
+
+.wx-dialog-close{
+    position:absolute;
+    right:20rpx;
+    top:20rpx;
+    width: 28rpx;
+    height: 28rpx;
+}

@@ -1,25 +1,26 @@
-<wux-backdrop id="wux-backdrop" bind:click="onCancel" />
-<wux-animation-group wux-class="wux-select" in="{{ in }}" class-names="wux-animate--slideInUp">
-    <view class="wux-select__toolbar" wx:if="{{ toolbar }}">
-        <view class="wux-select__toolbar-inner">
-            <view class="wux-select__toolbar-button wux-select__toolbar-button--cancel" bindtap="onCancel" wx:if="{{ toolbar.cancelText }}">{{ toolbar.cancelText }}</view>
-            <view class="wux-select__toolbar-title">{{ toolbar.title }}</view>
-            <view class="wux-select__toolbar-button wux-select__toolbar-button--confirm" bindtap="onConfirm" wx:if="{{ toolbar.confirmText }}">{{ toolbar.confirmText }}</view>
+<wux-popup position="bottom" visible="{{ in }}" safeArea="bottom" bind:close="onCancel">
+    <view class="{{ classes.wrap }}">
+        <view class="{{ classes.toolbar }}" wx:if="{{ toolbar }}">
+            <view class="{{ classes.inner }}">
+                <view class="{{ classes.cancel }}" hover-class="{{ classes.hover }}" bindtap="onCancel" wx:if="{{ toolbar.cancelText }}">{{ toolbar.cancelText }}</view>
+                <view class="{{ classes.title }}">{{ toolbar.title }}</view>
+                <view class="{{ classes.confirm }}" hover-class="{{ classes.hover }}" bindtap="onConfirm" wx:if="{{ toolbar.confirmText }}">{{ toolbar.confirmText }}</view>
+            </view>
         </view>
+        <scroll-view scroll-y scroll-into-view="{{ activeIndex }}" class="{{ classes.scrollView }}">
+            <wux-radio-group value="{{ value }}" bind:change="onRadioChange" wx:if="{{ !multiple }}">
+                <block wx:for="{{ common.getItems(options) }}" wx:key="index">
+                    <wux-radio id="{{ 'select-' + index }}" color="{{ item.color }}" thumb="{{ item.thumb }}" title="{{ item.title }}" label="{{ item.label }}" disabled="{{ item.disabled }}" value="{{ item.value }}" />
+                </block>
+            </wux-radio-group>
+            <wux-checkbox-group value="{{ value }}" bind:change="onCheckboxChange" wx:else>
+                <block wx:for="{{ common.getItems(options) }}" wx:key="index">
+                    <wux-checkbox id="{{ 'select-' + index }}" color="{{ item.color }}" extra="{{ item.extra }}" title="{{ item.title }}" label="{{ item.label }}" disabled="{{ item.disabled }}" value="{{ item.value }}" />
+                </block>
+            </wux-checkbox-group>
+        </scroll-view>
     </view>
-    <scroll-view scroll-y class="wux-select__content">
-        <wux-radio-group value="{{ value }}" bind:change="onRadioChange" wx:if="{{ !multiple }}">
-            <block wx:for="{{ common.getItems(options) }}" wx:key="index">
-                <wux-radio color="{{ item.color }}" thumb="{{ item.thumb }}" title="{{ item.title }}" label="{{ item.label }}" disabled="{{ item.disabled }}" value="{{ item.value }}" />
-            </block>
-        </wux-radio-group>
-        <wux-checkbox-group value="{{ value }}" bind:change="onCheckboxChange" wx:else>
-            <block wx:for="{{ common.getItems(options) }}" wx:key="index">
-                <wux-checkbox color="{{ item.color }}" extra="{{ item.extra }}" title="{{ item.title }}" label="{{ item.label }}" disabled="{{ item.disabled }}" value="{{ item.value }}" />
-            </block>
-        </wux-checkbox-group>
-    </scroll-view>
-</wux-animation-group>
+</wux-popup>
 
 <wxs module="common">
     module.exports.getItems = function(array) { return array.map(function(n) { if (n.constructor !== 'Object') { return { value: n, title: n } } return n }) }

@@ -1,6 +1,12 @@
-Component({
-    externalClasses: ['wux-class', 'wux-hover-class'],
+import baseComponent from '../helpers/baseComponent'
+import classNames from '../helpers/classNames'
+
+baseComponent({
     properties: {
+        prefixCls: {
+            type: String,
+            value: 'wux-button',
+        },
         type: {
             type: String,
             value: 'stable',
@@ -21,6 +27,10 @@ Component({
             type: Boolean,
             value: false,
         },
+        bordered: {
+            type: Boolean,
+            value: true,
+        },
         size: {
             type: String,
             value: 'default',
@@ -40,6 +50,10 @@ Component({
         openType: {
             type: String,
             value: '',
+        },
+        hoverClass: {
+            type: String,
+            value: 'default',
         },
         hoverStopPropagation: {
             type: Boolean,
@@ -77,11 +91,34 @@ Component({
             type: Boolean,
             value: false,
         },
+        appParameter: {
+            type: String,
+            value: '',
+        },
     },
+    computed: {
+        classes: ['prefixCls, hoverClass, type, size, block, full, clear, outline, bordered, disabled', function(prefixCls, hoverClass, type, size, block, full, clear, outline, bordered, disabled) {
+            const wrap = classNames(prefixCls, {
+                [`${prefixCls}--${type}`]: type,
+                [`${prefixCls}--${size}`]: size,
+                [`${prefixCls}--block`]: block,
+                [`${prefixCls}--full`]: full,
+                [`${prefixCls}--clear`]: clear,
+                [`${prefixCls}--outline`]: outline,
+                [`${prefixCls}--bordered`]: bordered,
+                [`${prefixCls}--disabled`]: disabled,
+            })
+            const hover = hoverClass && hoverClass !== 'default' ? hoverClass : `${prefixCls}--hover`
 
+            return {
+                wrap,
+                hover,
+            }
+        }],
+    },
     methods: {
         onTap() {
-            if (!this.data.disabled) {
+            if (!this.data.disabled && !this.data.loading) {
                 this.triggerEvent('click')
             }
         },
@@ -93,6 +130,12 @@ Component({
         },
         bindgetphonenumber(e) {
             this.triggerEvent('getphonenumber', e.detail)
+        },
+        bindopensetting(e) {
+            this.triggerEvent('opensetting', e.detail)
+        },
+        onError(e) {
+            this.triggerEvent('error', e.detail)
         },
     },
 })

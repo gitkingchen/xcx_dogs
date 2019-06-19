@@ -1,3 +1,6 @@
+import baseComponent from '../helpers/baseComponent'
+import styleToCssString from '../helpers/styleToCssString'
+
 const ENTER = 'enter'
 const ENTERING = 'entering'
 const ENTERED = 'entered'
@@ -20,13 +23,7 @@ const defaultClassNames = {
     exitDone: '', // 离开过渡的完成状态
 }
 
-Component({
-    externalClasses: ['wux-class'],
-    data: {
-        animateCss: '', // 动画样式
-        animateStatus: EXITED, // 动画状态，可选值 entering、entered、exiting、exited
-        isMounting: false, // 是否首次挂载
-    },
+baseComponent({
     properties: {
         // 触发组件进入或离开过渡的状态
         in: {
@@ -78,6 +75,31 @@ Component({
             type: Boolean,
             value: true,
         },
+        // 自定义类名
+        wrapCls: {
+            type: String,
+            value: '',
+        },
+        // 自定义样式
+        wrapStyle: {
+            type: [String, Object],
+            value: '',
+            observer(newVal) {
+                this.setData({
+                    extStyle: styleToCssString(newVal),
+                })
+            },
+        },
+        disableScroll: {
+            type: Boolean,
+            value: false,
+        },
+    },
+    data: {
+        animateCss: '', // 动画样式
+        animateStatus: EXITED, // 动画状态，可选值 entering、entered、exiting、exited
+        isMounting: false, // 是否首次挂载
+        extStyle: '', // 组件样式
     },
     methods: {
         /**
@@ -179,7 +201,7 @@ Component({
                 animateCss: doneClassName,
             }
 
-            // 第三阶段：设置进入过渡的完成状态，并触发 ENTERED 事件            
+            // 第三阶段：设置进入过渡的完成状态，并触发 ENTERED 事件
             this.safeSetData(enteredParams, () => {
                 this.triggerEvent('change', { animateStatus: ENTERED })
                 this.triggerEvent(ENTERED, { isAppearing: this.isAppearing })
@@ -310,51 +332,6 @@ Component({
             this.updateStatus(nextStatus)
         },
         /**
-         * safeSetData
-         * @param {Object} nextData 数据对象
-         * @param {Function} callback 回调函数
-         */
-        safeSetData(nextData, callback) {
-            this.pendingData = Object.assign({}, this.data, nextData)
-            callback = this.setNextCallback(callback)
-
-            this.setData(nextData, () => {
-                this.pendingData = null
-                callback()
-            })
-        },
-        /**
-         * 设置下一回调函数
-         * @param {Function} callback 回调函数
-         */
-        setNextCallback(callback) {
-            let active = true
-
-            this.nextCallback = (event) => {
-                if (active) {
-                    active = false
-                    this.nextCallback = null
-
-                    callback.call(this, event)
-                }
-            }
-
-            this.nextCallback.cancel = () => {
-                active = false
-            }
-
-            return this.nextCallback
-        },
-        /**
-         * 取消下一回调函数
-         */
-        cancelNextCallback() {
-            if (this.nextCallback !== null) {
-                this.nextCallback.cancel()
-                this.nextCallback = null
-            }
-        },
-        /**
          * 延迟一段时间触发回调
          * @param {Number} timeout 延迟时间
          * @param {Function} handler 回调函数
@@ -371,9 +348,10 @@ Component({
         onTap() {
             this.triggerEvent('click')
         },
-    },
-    created() {
-        this.nextCallback = null
+        /**
+         * 阻止移动触摸
+         */
+        noop() {},
     },
     attached() {
         let animateStatus = null
@@ -400,8 +378,5 @@ Component({
             this.triggerEvent('change', { animateStatus })
             this.updateStatus(appearStatus, true)
         })
-    },
-    detached() {
-        this.cancelNextCallback()
     },
 })

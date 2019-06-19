@@ -1,20 +1,64 @@
-Component({
-    externalClasses: ['wux-class'],
-    options: {
-        multipleSlots: true,
-    },
+import baseComponent from '../helpers/baseComponent'
+import classNames from '../helpers/classNames'
+
+baseComponent({
     relations: {
         '../cell-group/index': {
             type: 'parent',
         },
     },
-    data: {
-        isLast: false,
-    },
     properties: {
+        prefixCls: {
+            type: String,
+            value: 'wux-cell',
+        },
+        disabled: {
+            type: Boolean,
+            value: false,
+        },
         hoverClass: {
             type: String,
-            value: 'wux-cell--hover',
+            value: 'default',
+        },
+        hoverStopPropagation: {
+            type: Boolean,
+            value: false,
+        },
+        hoverStartTime: {
+            type: Number,
+            value: 20,
+        },
+        hoverStayTime: {
+            type: Number,
+            value: 70,
+        },
+        lang: {
+            type: String,
+            value: 'en',
+        },
+        sessionFrom: {
+            type: String,
+            value: '',
+        },
+        sendMessageTitle: {
+            type: String,
+            value: '',
+        },
+        sendMessagePath: {
+            type: String,
+            value: '',
+        },
+        sendMessageImg: {
+            type: String,
+            value: '',
+        },
+        showMessageCard: {
+            type: Boolean,
+            value: false,
+        },
+        appParameter: {
+            type: String,
+            value: '',
         },
         thumb: {
             type: String,
@@ -49,8 +93,59 @@ Component({
             value: 1,
         },
     },
+    data: {
+        isLast: false,
+    },
+    computed: {
+        classes: ['prefixCls, hoverClass, isLast, isLink, disabled', function(prefixCls, hoverClass, isLast, isLink, disabled) {
+            const wrap = classNames(prefixCls, {
+                [`${prefixCls}--last`]: isLast,
+                [`${prefixCls}--access`]: isLink,
+                [`${prefixCls}--disabled`]: disabled,
+            })
+            const hd = `${prefixCls}__hd`
+            const thumb = `${prefixCls}__thumb`
+            const bd = `${prefixCls}__bd`
+            const text = `${prefixCls}__text`
+            const desc = `${prefixCls}__desc`
+            const ft = `${prefixCls}__ft`
+            const hover = hoverClass && hoverClass !== 'default' ? hoverClass : `${prefixCls}--hover`
+
+            return {
+                wrap,
+                hd,
+                thumb,
+                bd,
+                text,
+                desc,
+                ft,
+                hover,
+            }
+        }],
+    },
     methods: {
         onTap() {
+            if (!this.data.disabled) {
+                this.triggerEvent('click')
+                this.linkTo()
+            }
+        },
+        bindgetuserinfo(e) {
+            this.triggerEvent('getuserinfo', e.detail)
+        },
+        bindcontact(e) {
+            this.triggerEvent('contact', e.detail)
+        },
+        bindgetphonenumber(e) {
+            this.triggerEvent('getphonenumber', e.detail)
+        },
+        bindopensetting(e) {
+            this.triggerEvent('opensetting', e.detail)
+        },
+        onError(e) {
+            this.triggerEvent('error', e.detail)
+        },
+        linkTo() {
             const { url, isLink, openType, delta } = this.data
             const navigate = [
                 'navigateTo',
@@ -60,12 +155,9 @@ Component({
                 'reLaunch',
             ]
 
-            this.triggerEvent('click')
-
-            if (!isLink || !url) {
+            // openType 属性可选值为 navigateTo、redirectTo、switchTab、navigateBack、reLaunch
+            if (!isLink || !url || !navigate.includes(openType)) {
                 return false
-            } else if (!navigate.includes(openType)) {
-                return console.warn('openType 属性可选值为 navigateTo、redirectTo、switchTab、navigateBack、reLaunch', openType)
             } else if (openType === 'navigateBack') {
                 return wx[openType].call(wx, { delta })
             } else {

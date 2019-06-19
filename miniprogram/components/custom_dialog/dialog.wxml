@@ -1,0 +1,16 @@
+ <!--components/Dialog/dialog.wxml-->
+    <view class='wx-dialog-container' hidden="{{!isShow}}" >
+        <view class='wx-dialog-mask' catchtouchmove="preventTouchMove"></view>
+        <view class='wx-dialog'>
+            <view class='wx-dialog-header'>
+              <view class="wx-dialog-title">{{ title }}</view>              
+              <image class="wx-dialog-close" mode="widthFix" bindtap='hideDialog' src='https://p3.ssl.qhimg.com/t01c2ffb6942da5c7b6.png'></image>
+            </view>
+            <view class='wx-dialog-body'>
+              <slot name="wx-dialog-body"></slot>
+            </view>
+            <view class='wx-dialog-footer'>
+              <slot name="wx-dialog-footer"></slot>
+            </view>
+        </view>
+    </view>
