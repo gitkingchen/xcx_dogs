@@ -6,6 +6,82 @@ Page({
   data: {
     dogs:[],
     pageNum:1,
+    items: [
+      {
+          type: 'filter',
+          label: '筛选',
+          value: 'filter',
+          children: [{
+                  type: 'radio',
+                  label: 'Languages',
+                  value: 'language',
+                  children: [{
+                          label: 'JavaScript',
+                          value: 'javascript',
+                      },
+                      {
+                          label: 'HTML',
+                          value: 'html',
+                      },
+                  ],
+              },
+              
+          ],
+          groups: ['1'],
+      },
+    ],
+  },
+  openDetail:function(e){
+    wx.redirectTo({
+      url: '../dogsDetail/dogsDetail?id='+e.currentTarget.dataset.id,
+    })
+  },
+
+  onOpen(e) {
+      this.setData({
+          pageStyle: 'height: 100%; overflow: hidden',
+      })
+  },
+  onClose(e) {
+      this.setData({
+          pageStyle: '',
+      })
+  },
+  onChange(e) {
+      const { checkedItems, items } = e.detail
+      const params = {}
+
+      checkedItems.forEach((n) => {
+          if (n.checked) {
+              if (n.value === 'filter') {
+                  n.children.filter((n) => n.selected).forEach((n) => {
+                      if (n.value === 'language') {
+                          const selected = n.children.filter((n) => n.checked).map((n) => n.value).join(' ')
+                          params.language = selected
+                      }
+                  })
+              }
+          }
+      })
+
+      this.getRes(params)
+  },
+  getRes(params = {}) {
+        console.log('params',params)
+        db.collection('users').limit(MAX_LIMIT).get({
+          success: res => {
+            console.log('res.data',res.data)
+            this.setData({
+               dogs:res.data
+            });
+          },
+          fail: err => {
+            wx.showToast({
+              icon: 'none',
+              title: '查询记录失败'
+            })
+          }
+        });
   },
   onRefresh() {
       db.collection('users').limit(MAX_LIMIT).get({
@@ -25,20 +101,7 @@ Page({
       });
   },
   onLoad: function (options) {
-
-    db.collection('users').limit(MAX_LIMIT).get({
-      success: res => {
-        this.setData({
-           dogs:res.data
-        });
-      },
-      fail: err => {
-        wx.showToast({
-          icon: 'none',
-          title: '查询记录失败'
-        })
-      }
-    });
+    this.getRes();
 
   },
   onReady: function () {

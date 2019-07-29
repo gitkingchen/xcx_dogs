@@ -1,81 +1,12 @@
-<view>
-	<!-- <wux-divider position="left" text="Wux Weapp" /> -->
-    <form bindsubmit="onSubmit">
-        <wux-upload count="5" list-type="picture-card" file-list="{{ fileList }}" bind:change="onChange" bind:success="onSuccess" bind:fail="onFail" bind:complete="onComplete" bind:preview="onPreview" bind:remove="onRemove">
-            <text>上传</text>
-        </wux-upload>
-    	<wux-cell-group title="带图标、说明的列表项">
-            <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="标题文字">
-            	<view slot="footer"><input name="nickname" type="text" style="text-align:left;" placeholder="ni" /></view>
-            </wux-cell>
-            <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="标题文字">
-            	<view slot="footer"><input name="wxnumber" type="text" style="text-align:left;" placeholder="hao" /></view>
-            </wux-cell>
-            <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="sheng">
-            	<view slot="footer">
-    	        	<picker name="date" mode="date" value="{{form.date}}" bindchange="bindDateChange">
-    				    {{form.date}}
-    				</picker>
-    			</view>
-            </wux-cell>
-            <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="gao">
-            	<view slot="footer">
-    	        	<picker name="height" value="{{heightIndex}}" mode="selector" range="{{heightArr}}" bindchange="bindHeightChange">
-    				    {{heightArr[heightIndex]}}CM
-    				</picker>
-    			</view>
-            </wux-cell>
-            <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="ti">
-            	<view slot="footer">
-    	        	<picker name="weight" mode="selector" range="{{weightArr}}" value="{{weightIndex}}" range-key="name" bindchange="bindWeightChange">
-    				    {{weightArr[weightIndex].name}}
-    				</picker>
-    			</view>
-            </wux-cell>
-            <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="xing">
-            	<view slot="footer">
-    	        	<picker name="star" mode="selector" range="{{starArr}}" value="{{starIndex}}" range-key="name" bindchange="bindStarChange">
-    				    {{starArr[starIndex].name}}
-    				</picker>
-    			</view>
-            </wux-cell>
-
-            <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="jiaxiang">
-            	<view slot="footer">
-    	        	<picker name="home" mode="region" bindchange="bindHomeChange">
-    				    {{homeVal}}
-    				</picker>
-    			</view>
-            </wux-cell>
-
-            <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="gongzuo">
-            	<view slot="footer">
-    	        	<picker name="work" mode="region" bindchange="bindWorkChange">
-    				    {{workVal}}
-    				</picker>
-    			</view>
-            </wux-cell>
-
-            <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="juzhu">
-            	<view slot="footer">
-    	        	<picker name="stay" mode="region" bindchange="bindStayChange">
-    				    {{stayVal}}
-    				</picker>
-    			</view>
-            </wux-cell>
-
-            <wux-cell thumb="http://pbqg2m54r.bkt.clouddn.com/logo.png" title="爱好" extra="{{ form.hobbyVal }}" bind:click="hobbyChange">
-            </wux-cell>
-
-            <wux-select id="hobby-select" />
-        </wux-cell-group>
-    <button form-type="submit" type="primary">提交</button>
-    </form>
-    
-
-
-
-
-
-
+<view class="userinfo">
+    <block wx:if="{{!hasUserInfo && canIUse}}">
+        <button open-type="getUserInfo" bindgetuserinfo="getUserInfo">登录</button>
+    </block>
+    <block wx:else>
+        <image style="width:100rpx;height:100rpx;" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFit"></image>
+        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+        <navigator url="/pages/info/info">
+            <text>编辑个人信息</text>
+        </navigator>
+    </block>
 </view>

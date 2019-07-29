@@ -1,6 +1,11 @@
-<wux-refresher id="wux-refresher" bind:refresh="onRefresh">
-    <i-card wx:for="{{dogs}}" wx:key="_id" title="{{item.nickname}}|{{item.date}}|{{item.height}}" extra="" thumb="{{item.pictures[0].res.fileID}}" i-class="card-demo">
-	    <view slot="content">{{item.stay[0]}}</view>
-	    <!-- <view slot="footer">尾部内容</view> -->
-	</i-card>
-</wux-refresher>
+<view style="{{ pageStyle }}">
+	<wux-filterbar items="{{ items }}" bind:change="onChange" bind:open="onOpen" bind:close="onClose" />
+	<wux-refresher id="wux-refresher" bind:refresh="onRefresh">
+		<wux-wing-blank size="default" wx:for="{{dogs}}" wx:key="_id">
+	        <wux-card wux-class="card-demo" title="{{item.nickname}}|{{item.date}}|{{item.height}}" extra="额外内容" thumb="{{item.pictures[0].res.fileID}}" bindtap="openDetail" data-id="{{item._openid}}">
+	            <view slot="body">卡片内容</view>
+	            <view slot="footer">尾部内容</view>
+	        </wux-card>
+	    </wux-wing-blank>
+	</wux-refresher>
+</view>

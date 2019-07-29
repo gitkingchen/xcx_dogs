@@ -1,0 +1,25 @@
+<!--miniprogram/pages/dogsDetail/dogsDetail.wxml-->
+<view>
+	<wux-gallery id="wux-gallery" />
+	<swiper indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
+	  <block wx:for="{{imgUrls}}" wx:key="*this">
+	    <swiper-item>
+	      <image src="{{item}}" mode="aspectFit" style="width:100%;" bindtap="showGallery" data-current="{{ index }}"/>
+	    </swiper-item>
+	  </block>
+	</swiper>
+
+	<view>123123</view>
+
+	<wux-cell-group title="信息">
+	    <wux-cell thumb="https://wux.cdn.cloverstd.com/logo.png" title="标题文字" extra="说明文字"></wux-cell>
+	    <wux-cell thumb="https://wux.cdn.cloverstd.com/logo.png" title="标题文字" extra="说明文字"></wux-cell>
+	</wux-cell-group>
+
+	<span wx:for="{{hobbys}}" wx:key="*this">
+		<wux-tag color="red">{{item}}</wux-tag>
+	</span>
+
+
+	<wux-divider text="我是有底线的~" />
+</view>

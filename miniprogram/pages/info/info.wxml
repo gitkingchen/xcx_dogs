@@ -1,0 +1,86 @@
+<!--miniprogram/pages/info/info.wxml-->
+
+<view>
+	<wux-divider position="left" text="Wux Weapp" />
+    <wux-toast id="wux-toast" />
+    <form bindsubmit="onSubmit">
+        <wux-upload 
+            uploaded="{{false}}" 
+            listType="picture-card"
+            controlled
+            fileList="{{ fileList }}"
+            bind:before="onBefore" 
+            bind:change="onChange" 
+            bind:preview="onPreview" 
+            bind:remove="onRemove">
+            <text>上传</text>
+        </wux-upload>
+    	<!-- <wux-cell-group title="带图标、说明的列表项"> -->
+            <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="标题文字">
+            	<view slot="footer"><input name="nickname" type="text" style="text-align:left;" placeholder="昵称" /></view>
+            </wux-cell>
+            <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="爱好" extra="{{ form.hobbyVal }}" bind:click="hobbyChange">
+            </wux-cell>
+            <!-- <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="标题文字">
+            	<view slot="footer"><input name="wxnumber" type="text" style="text-align:left;" placeholder="hao" /></view>
+            </wux-cell> -->
+            <!-- <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="sheng">
+            	<view slot="footer">
+    	        	<picker name="date" mode="date" value="{{form.date}}" bindchange="bindDateChange">
+    				    {{form.date}}
+    				</picker>
+    			</view>
+            </wux-cell>
+            <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="gao">
+            	<view slot="footer">
+    	        	<picker name="height" value="{{heightIndex}}" mode="selector" range="{{heightArr}}" bindchange="bindHeightChange">
+    				    {{heightArr[heightIndex]}}CM
+    				</picker>
+    			</view>
+            </wux-cell>
+            <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="ti">
+            	<view slot="footer">
+    	        	<picker name="weight" mode="selector" range="{{weightArr}}" value="{{weightIndex}}" range-key="name" bindchange="bindWeightChange">
+    				    {{weightArr[weightIndex].name}}
+    				</picker>
+    			</view>
+            </wux-cell>
+            <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="xing">
+            	<view slot="footer">
+    	        	<picker name="star" mode="selector" range="{{starArr}}" value="{{starIndex}}" range-key="name" bindchange="bindStarChange">
+    				    {{starArr[starIndex].name}}
+    				</picker>
+    			</view>
+            </wux-cell>
+
+            <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="jiaxiang">
+            	<view slot="footer">
+    	        	<picker name="home" mode="region" bindchange="bindHomeChange">
+    				    {{homeVal}}
+    				</picker>
+    			</view>
+            </wux-cell>
+
+            <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="gongzuo">
+            	<view slot="footer">
+    	        	<picker name="work" mode="region" bindchange="bindWorkChange">
+    				    {{workVal}}
+    				</picker>
+    			</view>
+            </wux-cell>
+
+            <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="juzhu">
+            	<view slot="footer">
+    	        	<picker name="stay" mode="region" bindchange="bindStayChange">
+    				    {{stayVal}}
+    				</picker>
+    			</view>
+            </wux-cell>
+
+            
+
+            <wux-select id="hobby-select" /> -->
+        <!-- </wux-cell-group> -->
+        <button form-type="submit" type="primary">提交</button>
+    </form>
+</view>

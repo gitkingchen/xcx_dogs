@@ -7,11 +7,22 @@
 		"postcss": true,
 		"minified": true,
 		"newFeature": true,
-		"nodeModules": true
+		"nodeModules": true,
+		"checkInvalidKey": true,
+		"checkSiteMap": true,
+		"uploadWithSourceMap": true,
+		"babelSetting": {
+			"ignore": [],
+			"disablePlugins": [],
+			"outputPath": ""
+		}
 	},
 	"appid": "wxc5f349e17988f915",
 	"projectname": "dogs",
-	"libVersion": "2.7.1",
+	"libVersion": "2.7.7",
+	"compileType": "miniprogram",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -29,7 +40,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 3,
+			"current": 5,
 			"list": [
 				{
 					"id": -1,
@@ -52,7 +63,20 @@
 				{
 					"id": -1,
 					"name": "dogs",
-					"pathName": "pages/dogs/dogs"
+					"pathName": "pages/dogs/dogs",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "dogsDetail",
+					"pathName": "pages/dogsDetail/dogsDetail",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "pages/info/info",
+					"pathName": "pages/info/info",
+					"scene": null
 				}
 			]
 		}

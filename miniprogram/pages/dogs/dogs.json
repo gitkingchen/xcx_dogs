@@ -2,7 +2,9 @@
   "navigationBarTitleText": "首页",
   "onReachBottomDistance":100,
   "usingComponents": {
-    "i-card": "../../components/card/index",
-    "wux-refresher": "../../components/refresher/index"
+    "wux-card": "../../components/card/index",
+    "wux-wing-blank": "../../components/wing-blank/index",
+    "wux-refresher": "../../components/refresher/index",
+    "wux-filterbar": "../../components/filterbar/index"
   }
 }

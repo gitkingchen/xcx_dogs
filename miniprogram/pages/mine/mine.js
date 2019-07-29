@@ -1,215 +1,97 @@
-import { $wuxSelect } from '../../components/index';
+import { $wuxSelect,$wuxToast } from '../../components/index';
+import regeneratorRuntime from '../../lib/regenerator-runtime'
 const db = wx.cloud.database();
+const app = getApp();
+
 Page({
   data: {
-      form:{
-        nickname:'',
-        wxnumber:'',
-        date:'1990-01-01',
-        weight:'',
-        star:'',
-        home:[],
-        work:[],
-        stay:[],
-        hobbyVal: [],
-      },
-
-      fileList: [
-          // {
-          //     uid: 0,
-          //     status: 'uploading',
-          //     url: 'http://pbqg2m54r.bkt.clouddn.com/qrcode.jpg',
-          // },
-          // {
-          //     uid: 1,
-          //     status: 'done',
-          //     url: 'http://pbqg2m54r.bkt.clouddn.com/qrcode.jpg',
-          // },
-          // {
-          //     uid: 2,
-          //     status: 'error',
-          //     url: 'http://pbqg2m54r.bkt.clouddn.com/qrcode.jpg',
-          // }
-      ],
-
-      heightIndex:10,
-      heightArr:[],
+      userInfo: {},
+      hasUserInfo: false,
+      canIUse: wx.canIUse('button.open-type.getUserInfo'),
       
-      weightIndex:1,
-      weightArr:[{
-        name:'shou',
-        value:0
-      },{
-        name:'pang',
-        value:1
-      }],
-
-      starIndex:1,
-      starArr:[{
-        name:'白',
-        value:0
-      },{
-        name:'牛',
-        value:1
-      }],
-
-      homeVal:'请选择',
-      workVal:'请选择',
-      stayVal:'请选择',
-  },
-
-  onChange(e) {
-      // console.log('onChange', e)
-      const { file } = e.detail
-      if (file.status === 'uploading') {
-          this.setData({
-              progress: 0,
-          })
-          wx.showLoading()
-      } else if (file.status === 'done') {
-          this.setData({
-              imageUrl: file.url,
-          })
-      }
-
-  },
-  onSuccess(e) {
-      console.log('onSuccess', e)
-      const { file, fileList } = e.detail
-      this.setData({
-          fileList: fileList
-      })
-  },
-  onFail(e) {
-      console.log('onFail', e)
-  },
-  onComplete(e) {
-      // console.log('onComplete', e)
-      wx.hideLoading()
-  },
-  onProgress(e) {
-      // console.log('onProgress', e)
-      this.setData({
-          progress: e.detail.file.progress,
-      })
-  },
-  onPreview(e) {
-      // console.log('onPreview', e)
-      const { file, fileList } = e.detail
-      wx.previewImage({
-          current: file.url,
-          urls: fileList.map((n) => n.url),
-      })
-  },
-  onRemove(e) {
-      const { file, fileList } = e.detail
-      this.setData({
-          fileList: fileList.filter((n) => n.uid !== file.uid),
-      })
-  },
-  bindDateChange: function (e) {
-    this.setData({
-      'form.date': e.detail.value
-    })
-  },
-  bindHeightChange: function (e) {
-    //this.data.heightIndex = e.detail.value;
-    this.setData({
-      heightIndex:e.detail.value
-    })
-  },
-  bindWeightChange: function (e) {
-    this.setData({
-      weightIndex: e.detail.value
-    })
-  },
-  bindStarChange: function (e) {
-    this.setData({
-      starIndex: e.detail.value
-    })
-  },
-
-  bindHomeChange:function(e){
-    this.setData({
-      homeVal: e.detail.value
-    })
-  },
-  bindWorkChange:function(e){
-    this.setData({
-      workVal: e.detail.value
-    })
-  },
-  bindStayChange:function(e){
-    this.setData({
-      stayVal: e.detail.value
-    })
-  },
-  hobbyChange() {
-    $wuxSelect('#hobby-select').open({
-        value: this.data.form.hobbyVal,
-        multiple: true,
-        toolbar: {
-            title: '请选择',
-            confirmText: '完成',
-        },
-        options: [{
-            title: '画画',
-            value: '画画',
-        },{
-            title: '打球',
-            value: '打球',
-        }],
-        onConfirm: (value, index, options) => {
-            this.data.form.hobbyVal = value;
-            this.setData({
-              'form.hobbyVal': value,
-              //hobbyTitle: index.map((n) => options[n].title),
-            })
-        },
-    })
-  },
-  onSubmit:function(e){//提交
-    var params = e.detail.value;
-    params['hobbyVal'] = this.data.form.hobbyVal;
-    params['height'] = this.data.heightArr[this.data.heightIndex];
-    params['pictures'] = this.data.fileList;
-    console.log('params',params)
-    //return;
-    db.collection('users').add({
-      data: params,
-      success: res => {
-        wx.showToast({
-          title: '提交成功',
-        });
-
-      },
-      fail: err => {
-        wx.showToast({
-          icon: 'none',
-          title: '提交失败'
-        });
-      }
-    })
-
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log(app.globalData)
+    if (app.globalData.userInfo) {
+          this.setData({
+              userInfo: app.globalData.userInfo,
+              hasUserInfo: true
+          })
 
+          this.addUser(app.globalData.userInfo)
+      } else if (this.data.canIUse) {
+          // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
+          // 所以此处加入 callback 以防止这种情况
+          app.userInfoReadyCallback = res => {
+              this.setData({
+                  userInfo: res.userInfo,
+                  hasUserInfo: true
+              })
+
+              this.addUser(res.userInfo)
+          }
+      } else {
+          // 在没有 open-type=getUserInfo 版本的兼容处理
+          wx.getUserInfo({
+              success: res => {
+                  app.globalData.userInfo = res.userInfo
+
+                  this.setData({
+                      userInfo: res.userInfo,
+                      hasUserInfo: true
+                  })
+
+                  this.addUser(app.globalData.userInfo)
+              }
+          })
+      }
+  },
+
+  getUserInfo (e) {
+      if (e.detail.userInfo) {
+          app.globalData.userInfo = e.detail.userInfo
+
+          this.setData({
+              userInfo: e.detail.userInfo,
+              hasUserInfo: true
+          })
+
+          this.addUser(app.globalData.userInfo)
+
+          // wx.switchTab({ url: '/pages/index/index' })
+      }
+  },
+
+  async addUser (user) {
+      if (app.globalData.hasUser) {
+          return
+      }
+
+      // 获取数据库实例
+      const db = wx.cloud.database({})
+
+      // 插入用户信息
+      let result = await db.collection('users').add({
+          data: {
+              nickName: user.nickName,
+              albums: []
+          }
+      })
+
+      // 在此插入储存用户代码
+
+      app.globalData.nickName = user.nickName
+      app.globalData.id = result._id
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
   */
   onReady: function () {
-    for(var i=150;i<201;i++){
-      this.data.heightArr.push(i);
-    }
-
-    this.setData({
-      heightArr:this.data.heightArr
-    })
+    
 
   },
 
