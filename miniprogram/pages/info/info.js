@@ -1,64 +1,73 @@
 // miniprogram/pages/info/info.js
-import { $wuxSelect,$wuxToast } from '../../components/index';
+import { $wuxSelect,$wuxToast,$wuxForm } from '../../components/index';
 import regeneratorRuntime from '../../lib/regenerator-runtime'
 const db = wx.cloud.database();
 const app = getApp();
 
 Page({
 
-  /**
-   * 页面的初始数据
-   */
   data: {
+    //提交的元素
     form:{
-        nickname:'',
-        wxnumber:'',
-        date:'1990-01-01',
-        weight:'',
-        star:'',
-        home:[],
-        work:[],
-        stay:[],
-        hobbyVal: [],
-      },
+      nickname:'',
+      wxnumber:'',
+      date:'1990-01-01',
+      weight:'',
+      star:'',
+      home:[],
+      work:[],
+      stay:[],
+      hobbyVal: '请选择',
+    },
+    //提交的元素
+    
+    //配置项
+    hobbyOpts: ['画画', '打球'],
 
-      fileList: [
-        // {
-        //     // uid: 0,
-        //     // status: 'uploading',
-        //     url: 'https://wux.cdn.cloverstd.com/qrcode.jpg',
-        // },
-        // {
-        //     // uid: 1,
-        //     // status: 'done',
-        //     url: 'https://wux.cdn.cloverstd.com/qrcode.jpg',
-        // },
-      ],
 
-      heightIndex:10,
-      heightArr:[],
-      
-      weightIndex:1,
-      weightArr:[{
-        name:'shou',
-        value:0
-      },{
-        name:'pang',
-        value:1
-      }],
+    //配置项
 
-      starIndex:1,
-      starArr:[{
-        name:'白',
-        value:0
-      },{
-        name:'牛',
-        value:1
-      }],
+    fileList: [
+      // {
+      //     // uid: 0,
+      //     // status: 'uploading',
+      //     url: 'https://wux.cdn.cloverstd.com/qrcode.jpg',
+      // },
+      // {
+      //     // uid: 1,
+      //     // status: 'done',
+      //     url: 'https://wux.cdn.cloverstd.com/qrcode.jpg',
+      // },
+    ],
 
-      homeVal:'请选择',
-      workVal:'请选择',
-      stayVal:'请选择',
+    heightIndex:10,
+    heightArr:[],
+    
+    weightIndex:1,
+    weightArr:[{
+      name:'shou',
+      value:0
+    },{
+      name:'pang',
+      value:1
+    }],
+
+    starIndex:1,
+    starArr:[{
+      name:'白',
+      value:0
+    },{
+      name:'牛',
+      value:1
+    }],
+
+    homeVal:'请选择',
+    workVal:'请选择',
+    stayVal:'请选择',
+  },
+
+  hobbyChange(e) {
+      this.setData({ 'form.hobbyVal': e.detail.value })
   },
 
   onBefore(e){
@@ -75,11 +84,9 @@ Page({
     this.setData({ fileList })
 
   },
-
-  onChange(e) {
-      console.log('onChange', e)
-  },
-  
+  // onChange(e) {
+  //     console.log('onChange', e)
+  // },
   onPreview(e) {
       // console.log('onPreview', e)
       const { file, fileList } = e.detail
@@ -94,88 +101,66 @@ Page({
     var fileList = this.data.fileList.filter((p, idx) => idx !== index);
     this.setData({ fileList });
   },
-  bindDateChange: function (e) {
-    this.setData({
-      'form.date': e.detail.value
-    })
-  },
-  bindHeightChange: function (e) {
-    //this.data.heightIndex = e.detail.value;
-    this.setData({
-      heightIndex:e.detail.value
-    })
-  },
-  bindWeightChange: function (e) {
-    this.setData({
-      weightIndex: e.detail.value
-    })
-  },
-  bindStarChange: function (e) {
-    this.setData({
-      starIndex: e.detail.value
-    })
-  },
+  // bindDateChange: function (e) {
+  //   this.setData({
+  //     'form.date': e.detail.value
+  //   })
+  // },
+  // bindHeightChange: function (e) {
+  //   //this.data.heightIndex = e.detail.value;
+  //   this.setData({
+  //     heightIndex:e.detail.value
+  //   })
+  // },
+  // bindWeightChange: function (e) {
+  //   this.setData({
+  //     weightIndex: e.detail.value
+  //   })
+  // },
+  // bindStarChange: function (e) {
+  //   this.setData({
+  //     starIndex: e.detail.value
+  //   })
+  // },
 
-  bindHomeChange:function(e){
-    this.setData({
-      homeVal: e.detail.value
-    })
-  },
-  bindWorkChange:function(e){
-    this.setData({
-      workVal: e.detail.value
-    })
-  },
-  bindStayChange:function(e){
-    this.setData({
-      stayVal: e.detail.value
-    })
-  },
-  hobbyChange() {
-    $wuxSelect('#hobby-select').open({
-        value: this.data.form.hobbyVal,
-        multiple: true,
-        toolbar: {
-            title: '请选择',
-            confirmText: '完成',
-        },
-        options: [{
-            title: '画画',
-            value: '画画',
-        },{
-            title: '打球',
-            value: '打球',
-        }],
-        onConfirm: (value, index, options) => {
-            this.data.form.hobbyVal = value;
-            this.setData({
-              'form.hobbyVal': value,
-              //hobbyTitle: index.map((n) => options[n].title),
-            })
-        },
-    })
-  },
+  // bindHomeChange:function(e){
+  //   this.setData({
+  //     homeVal: e.detail.value
+  //   })
+  // },
+  // bindWorkChange:function(e){
+  //   this.setData({
+  //     workVal: e.detail.value
+  //   })
+  // },
+  // bindStayChange:function(e){
+  //   this.setData({
+  //     stayVal: e.detail.value
+  //   })
+  // },
+  
   uploadPhoto (filePath) {
-      // 调用wx.cloud.uploadFile上传文件
       return wx.cloud.uploadFile({
           cloudPath: `${Date.now()}-${Math.floor(Math.random(0, 1) * 10000000)}.png`,
           filePath
-      })
-
+      });
   },
-  async addInfo (photos) {
-    console.log('photos',photos)
-
+  async addInfo (photos,params) {
+  
     try {
       
       const result = await wx.cloud.callFunction({
         name: 'addInfo',
         data: {
           fileID:photos.map(photo => {return photo.fileID}),
-          other:'otherinfo'
+          baseInfo:params
         }
       })
-      console.log('result',result)
+      
+      wx.showToast({
+        title: '添加信息成功',
+        icon: 'none'
+      })
 
     } catch (err) {
       wx.showToast({
@@ -232,15 +217,18 @@ Page({
         // })
 
   },
-  onSubmit:function(e){//提交,判断添加还是编辑
-    console.log('submit',e)
-    var params = e.detail.value;
-    params['hobbyVal'] = this.data.form.hobbyVal;
+  onSubmit:function(){//提交,判断添加还是编辑
+    const { getFieldsValue, getFieldValue, setFieldsValue } = $wuxForm();
+    const params = getFieldsValue();
+    console.log(params)
+    // return;
+    // var params = e.detail.value;
+    // params['hobbyVal'] = this.data.form.hobbyVal;
     //params['height'] = this.data.heightArr[this.data.heightIndex];
-    console.log('params',params)
+    //console.log('params',params)
     const uploadTasks = this.data.fileList.map(item => this.uploadPhoto(item.url));
-    Promise.all(uploadTasks).then(result => {
-        this.addInfo(result);
+    Promise.all(uploadTasks).then(photos => {
+        this.addInfo(photos,params);
         //wx.hideLoading()
     }).catch(() => {
         //wx.hideLoading()

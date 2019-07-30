@@ -3,7 +3,8 @@
 <view>
 	<wux-divider position="left" text="Wux Weapp" />
     <wux-toast id="wux-toast" />
-    <form bindsubmit="onSubmit">
+    <!-- <form bindsubmit="onSubmit"> -->
+    <wux-form id="wux-form" bind:change="onChange">
         <wux-upload 
             uploaded="{{false}}" 
             listType="picture-card"
@@ -17,10 +18,24 @@
         </wux-upload>
     	<!-- <wux-cell-group title="带图标、说明的列表项"> -->
             <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="标题文字">
-            	<view slot="footer"><input name="nickname" type="text" style="text-align:left;" placeholder="昵称" /></view>
+            	<view slot="footer">
+                    <wux-field name="nickname">
+                        <wux-input/>
+                    </wux-field>
+                </view>
             </wux-cell>
-            <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="爱好" extra="{{ form.hobbyVal }}" bind:click="hobbyChange">
+            <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="标题文字">
+                <view slot="footer">
+                    <wux-field name="hobbyVal" initialValue="{{ form.hobbyVal }}">
+                        <wux-popup-select multiple options="{{ hobbyOpts }}" bind:change="hobbyChange">
+                            <wux-cell extra="{{ form.hobbyVal }}"></wux-cell>
+                        </wux-popup-select>
+                    </wux-field>
+                </view>
             </wux-cell>
+            <!-- <wux-cell extra="{{ popupSelect }}"></wux-cell> -->
+            <!-- <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="爱好" extra="{{ form.hobbyVal }}" bind:click="hobbyChange">
+            </wux-cell> -->
             <!-- <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="标题文字">
             	<view slot="footer"><input name="wxnumber" type="text" style="text-align:left;" placeholder="hao" /></view>
             </wux-cell> -->
@@ -77,10 +92,10 @@
     			</view>
             </wux-cell>
 
-            
-
-            <wux-select id="hobby-select" /> -->
+            -->
         <!-- </wux-cell-group> -->
-        <button form-type="submit" type="primary">提交</button>
-    </form>
+        <!-- <wux-select id="hobby-select" /> -->
+        <button bindtap="onSubmit" type="primary">提交</button>
+    </wux-form>
+    <!-- </form> -->
 </view>

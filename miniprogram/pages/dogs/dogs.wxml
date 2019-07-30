@@ -1,11 +1,28 @@
 <view style="{{ pageStyle }}">
-	<wux-filterbar items="{{ items }}" bind:change="onChange" bind:open="onOpen" bind:close="onClose" />
-	<wux-refresher id="wux-refresher" bind:refresh="onRefresh">
+	<!-- <wux-filterbar items="{{ items }}" bind:change="onChange" bind:open="onOpen" bind:close="onClose" /> -->
+	<!-- <wux-refresher id="wux-refresher" bind:refresh="onRefresh">
 		<wux-wing-blank size="default" wx:for="{{dogs}}" wx:key="_id">
-	        <wux-card wux-class="card-demo" title="{{item.nickname}}|{{item.date}}|{{item.height}}" extra="额外内容" thumb="{{item.pictures[0].res.fileID}}" bindtap="openDetail" data-id="{{item._openid}}">
+	        <wux-card wux-class="card-demo" title="{{item.baseInfo.nickname}}|{{item.baseInfo.nickname}}|{{item.baseInfo.nickname}}" extra="额外内容" thumb="{{item.fileID[0]}}" bindtap="openDetail" data-id="{{item._openid}}">
 	            <view slot="body">卡片内容</view>
 	            <view slot="footer">尾部内容</view>
 	        </wux-card>
 	    </wux-wing-blank>
+	</wux-refresher> -->
+
+	<wux-refresher id="wux-refresher" distance="120" bind:refresh="onRefresh" >
+		<view class="weui-panel weui-panel_access">
+	        <view class="weui-panel__bd">
+	            <view class="weui-media-box weui-media-box_text" wx:for="{{ items }}" wx:key="">
+	                <view class="weui-media-box__title weui-media-box__title_in-text">{{ item.title }}</view>
+	                <view class="weui-media-box__desc">{{ item.content }}</view>
+	            </view>
+	        </view>
+	    </view>
+	    <!-- <wux-wing-blank size="default" wx:for="{{items}}" wx:key="_id">
+	        <wux-card wux-class="card-demo" title="{{item.baseInfo.nickname}}|{{item.baseInfo.nickname}}|{{item.baseInfo.nickname}}" extra="额外内容" thumb="{{item.fileID[0]}}" bindtap="openDetail" data-id="{{item._openid}}">
+	            <view slot="body">卡片内容</view>
+	            <view slot="footer">尾部内容</view>
+	        </wux-card>
+	    </wux-wing-blank> -->
 	</wux-refresher>
 </view>
