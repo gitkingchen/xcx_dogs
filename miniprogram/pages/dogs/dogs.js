@@ -1,17 +1,24 @@
-import { $startWuxRefresher, $stopWuxRefresher, $stopWuxLoader } from '../../components/index';
-const getList = (count = 10, step = 0) => [...new Array(count)].map((n, i) => ({ title: `Pull down ${i + step}`, content: 'Wux Weapp' }))
+import { 
+  // $startWuxRefresher, 
+  // $stopWuxRefresher, 
+  // $stopWuxLoader, 
+  $wuxLoading 
+} from '../../components/index';
+import regeneratorRuntime from '../../lib/regenerator-runtime'
+
+//const getList = (count = 10, step = 0) => [...new Array(count)].map((n, i) => ({ title: `Pull down ${i + step}`, content: 'Wux Weapp' }))
 
 const db = wx.cloud.database();
-const MAX_LIMIT = 5;
+//const MAX_LIMIT = 5;
 
 Page({
   data: {
     dogs:[],
-    pageNum:1,
-    items: [],
-    count: 0,
-    scrollTop:0,
-    
+    //offset:0,//第一页开始
+    limit:5,//只展示5条
+    dogs: [],
+    noData:false,
+    //count: 0,
 
     // items: [
     //   {
@@ -73,27 +80,69 @@ Page({
 
   //     this.getRes(params)
   // },
-  // getRes(params = {}) {
-  //       console.log('params',params)
-  //       db.collection('users').limit(MAX_LIMIT).get({
-  //         success: res => {
-  //           console.log('res.data',res.data)
-  //           this.setData({
-  //              dogs:res.data
-  //           });
-  //         },
-  //         fail: err => {
-  //           wx.showToast({
-  //             icon: 'none',
-  //             title: '查询记录失败'
-  //           })
-  //         }
-  //       });
-  // },
-  onRefresh() {//下拉完成,开始下拉时
-      // db.collection('users').limit(MAX_LIMIT).get({
+  async getRes() {
+
+      var noData = this.data.noData;
+      if(noData){
+          return;
+      }
+      this.$wuxLoading.show({
+          text: '数据加载中',
+      });
+
+      try {
+      
+        const res = await wx.cloud.callFunction({
+          name: 'getInfo',
+          data: {
+            offset:this.data.dogs.length,
+            limit:this.data.limit
+          }
+        })
+        
+        console.log('res',res)
+        var dogs = res.result.data;
+
+        if(dogs.length < this.data.limit){
+          noData = true;
+        }
+        // else{
+        //   noData = false;
+        // }
+
+        this.setData({
+           dogs:this.data.dogs.concat(dogs),
+           noData
+        });
+
+      } catch (err) {
+        wx.showToast({
+          title: '查询信息失败',
+          icon: 'none'
+        })
+      }
+
+      this.$wuxLoading.hide();
+
+      // db.collection('users').limit(this.data.limit).get({
       //   success: res => {
-      //     this.data.pageNum = 1;
+      //     console.log('res.data',res.data)
+      //     this.setData({
+      //        dogs:res.data
+      //     });
+      //   },
+      //   fail: err => {
+      //     wx.showToast({
+      //       icon: 'none',
+      //       title: '查询记录失败'
+      //     })
+      //   }
+      // });
+  },
+  //onRefresh() {//下拉完成,开始下拉时
+      // db.collection('users').limit(this.data.limit).get({
+      //   success: res => {
+      //     this.data.offset = 1;
       //     this.setData({
       //       dogs:res.data
       //     });
@@ -107,17 +156,19 @@ Page({
       //   }
       // });
       
-      console.log('onRefresh')
+  //    console.log('onRefresh')
 
-      this.setData({ count: 10 })
+      //this.setData({ count: 10 })
 
-      setTimeout(() => {
-          this.setData({ items: getList() })
-          $stopWuxRefresher()
-      }, 1000)
-  },
-  onLoadmore() {
-      console.log('onLoadmore')
+      //setTimeout(() => {
+  //    this.getRes();
+      //    this.setData({ items: getList() })
+      //$stopWuxRefresher();
+      //$stopWuxLoader('#wux-refresher', this, true)
+      //}, 1000)
+  //},
+  // onLoadmore() {
+  //     console.log('onLoadmore')
       // setTimeout(() => {
       //     this.setData({
       //         items: [...this.data.items, ...getList(10, this.data.count)],
@@ -128,48 +179,43 @@ Page({
       //         $stopWuxLoader()
       //     } else {
       //         console.log('没有更多数据')
-      //         $stopWuxLoader('#wux-refresher', this, true)
+      //         $stopWuxLoader('#wux-refresher', this, true)//显示没有更多数据
       //     }
       // }, 3000)
-  },
+  //},
   onLoad: function (options) {
-    //this.getRes();
-    $startWuxRefresher()
+    this.$wuxLoading = $wuxLoading();
+    this.getRes();
+    //$startWuxRefresher()
 
   },
-  onPageScroll(e) {
-      this.setData({
-          scrollTop: e.scrollTop
-      })
-  },
-  // onPulling() {//下拉开始
-  //     console.log('onPulling')
+  // onReady: function () {
+
   // },
-  onReady: function () {
-
-  },
   onReachBottom: function () {
     console.log('onReachBottom')
-    setTimeout(() => {
+    this.getRes();
+    
+    // setTimeout(() => {
 
-        if (this.data.items.length < 60) {
-            $stopWuxLoader()
-        } else {
-            console.log('没有更多数据')
-            $stopWuxLoader('#wux-refresher', this, true)
-            return;
-        }
+    //     if (this.data.items.length < 60) {
+    //         $stopWuxLoader()
+    //     } else {
+    //         console.log('没有更多数据')
+    //         $stopWuxLoader('#wux-refresher', this, true)
+    //         return;
+    //     }
 
-        this.setData({
-            items: [...this.data.items, ...getList(10, this.data.count)],
-            count: this.data.count + 10,
-        })
+    //     this.setData({
+    //         items: [...this.data.items, ...getList(10, this.data.count)],
+    //         count: this.data.count + 10,
+    //     })
 
-    }, 1000)
+    // }, 1000)
 
-    // db.collection('users').skip(this.data.pageNum * MAX_LIMIT).limit(MAX_LIMIT).get({
+    // db.collection('users').skip(this.data.offset * this.data.limit).limit(this.data.limit).get({
     //   success: res => {
-    //     this.data.pageNum++;
+    //     this.data.offset++;
     //     this.setData({
     //       dogs:this.data.dogs.concat(res.data)
     //     });

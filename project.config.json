@@ -73,9 +73,10 @@
 					"query": ""
 				},
 				{
-					"id": -1,
-					"name": "pages/info/info",
+					"id": 5,
+					"name": "info",
 					"pathName": "pages/info/info",
+					"query": "",
 					"scene": null
 				}
 			]

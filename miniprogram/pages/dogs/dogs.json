@@ -1,7 +1,8 @@
 {
   "navigationBarTitleText": "首页",
-  "onReachBottomDistance":100,
+  "onReachBottomDistance":0,
   "usingComponents": {
+    "wux-loading": "../../components/loading/index",
     "wux-card": "../../components/card/index",
     "wux-wing-blank": "../../components/wing-blank/index",
     "wux-refresher": "../../components/refresher/index",
