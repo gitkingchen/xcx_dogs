@@ -1,5 +1,5 @@
 // miniprogram/pages/info/info.js
-import { $wuxSelect,$wuxToast,$wuxForm } from '../../components/index';
+import { $wuxSelect,$wuxToast,$wuxForm,$wuxLoading } from '../../components/index';
 import regeneratorRuntime from '../../lib/regenerator-runtime'
 const db = wx.cloud.database();
 const app = getApp();
@@ -146,28 +146,37 @@ Page({
       });
   },
   async addInfo (photos,params) {
-  
     try {
       
-      const result = await wx.cloud.callFunction({
+      const res = await wx.cloud.callFunction({
         name: 'addInfo',
         data: {
           fileID:photos.map(photo => {return photo.fileID}),
           baseInfo:params
         }
       })
-      
-      wx.showToast({
-        title: '添加信息成功',
-        icon: 'none'
-      })
 
+      this.$wuxLoading.hide();
+
+      if(res.result.ret){
+        wx.showToast({
+          title: '添加信息成功，请继续浏览吧~',
+          icon: 'none'
+        })
+      }else{
+        wx.showToast({
+          title: res.result.msg,
+          icon: 'none'
+        })
+      }
+    
     } catch (err) {
       wx.showToast({
-        title: '添加信息失败',
+        title: '添加信息失败，请告知开发小哥哦~',
         icon: 'none'
       })
     }
+
 
     
     // db.collection('users').add({
@@ -218,6 +227,9 @@ Page({
 
   },
   onSubmit:function(){//提交,判断添加还是编辑
+    this.$wuxLoading.show({
+        text: '数据加载中',
+    });
     const { getFieldsValue, getFieldValue, setFieldsValue } = $wuxForm();
     const params = getFieldsValue();
     console.log(params)
@@ -229,9 +241,13 @@ Page({
     const uploadTasks = this.data.fileList.map(item => this.uploadPhoto(item.url));
     Promise.all(uploadTasks).then(photos => {
         this.addInfo(photos,params);
-        //wx.hideLoading()
+        setTimeout(()=>{
+          wx.switchTab({
+            url: '../dogs/dogs'
+          })
+        },2000);
     }).catch(() => {
-        //wx.hideLoading()
+        this.$wuxLoading.hide();
         wx.showToast({ title: '上传图片错误', icon: 'error' })
     })
 
@@ -241,7 +257,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.$wuxLoading = $wuxLoading();
+    // wx.switchTab({ test
+    //   url: '../dogs/dogs'
+    // })
   },
 
   /**

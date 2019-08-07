@@ -98,4 +98,5 @@
         <button bindtap="onSubmit" type="primary">提交</button>
     </wux-form>
     <!-- </form> -->
+    <wux-loading id="wux-loading" />
 </view>

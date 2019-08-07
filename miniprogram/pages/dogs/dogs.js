@@ -9,6 +9,7 @@ import regeneratorRuntime from '../../lib/regenerator-runtime'
 //const getList = (count = 10, step = 0) => [...new Array(count)].map((n, i) => ({ title: `Pull down ${i + step}`, content: 'Wux Weapp' }))
 
 const db = wx.cloud.database();
+const app = getApp();
 //const MAX_LIMIT = 5;
 
 Page({
@@ -16,7 +17,6 @@ Page({
     dogs:[],
     //offset:0,//第一页开始
     limit:5,//只展示5条
-    dogs: [],
     noData:false,
     //count: 0,
 
@@ -46,9 +46,17 @@ Page({
     //],
   },
   openDetail:function(e){
-    wx.redirectTo({
-      url: '../dogsDetail/dogsDetail?id='+e.currentTarget.dataset.id,
-    })
+    //判断是否有登录信息，有就跳转到详情，没有去跳我的
+    if(app.globalData.userInfo){
+      wx.redirectTo({
+        url: '../dogsDetail/dogsDetail?id='+e.currentTarget.dataset.id,
+      })  
+    }else{
+      wx.redirectTo({
+        url: '../mine/mine'
+      })
+    }
+    
   },
 
   onOpen(e) {
@@ -189,9 +197,11 @@ Page({
     //$startWuxRefresher()
 
   },
-  // onReady: function () {
-
-  // },
+  //onShow:function(){//从info跳转过来的，就不重新刷新了，因为也不会有自己的数据
+    // this.data.dogs = [];
+    // this.data.noData = false;
+    // this.getRes();
+  //},
   onReachBottom: function () {
     console.log('onReachBottom')
     this.getRes();

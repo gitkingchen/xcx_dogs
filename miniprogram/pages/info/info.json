@@ -1,5 +1,6 @@
 {
   "usingComponents": {
+    "wux-loading": "../../components/loading/index",
     "wux-form": "../../components/form/index",
     "wux-field": "../../components/field/index",
     "wux-slider": "../../components/slider/index",

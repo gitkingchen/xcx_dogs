@@ -20,7 +20,7 @@
 	        </view>
 	    </view> -->
 	    <wux-wing-blank size="default" wx:for="{{dogs}}" wx:key="_id">
-	        <wux-card wux-class="card-demo" title="{{item.baseInfo.nickname}}|{{item.baseInfo.nickname}}|{{item.baseInfo.nickname}}" extra="额外内容" thumb="{{item.fileID[0]}}" bindtap="openDetail" data-id="{{item._openid}}">
+	        <wux-card wux-class="card-demo" title="{{item.baseInfo.nickname}}|{{item.baseInfo.nickname}}|{{item.baseInfo.nickname}}" extra="额外内容" thumb="{{item.fileID[0]}}" bindtap="openDetail" data-id="{{item.openid}}">
 	            <view slot="body">卡片内容</view>
 	            <view slot="footer">尾部内容</view>
 	        </wux-card>

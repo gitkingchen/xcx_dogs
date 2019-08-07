@@ -15,13 +15,13 @@ Page({
    */
   onLoad: function (options) {
     console.log(app.globalData)
-    if (app.globalData.userInfo) {
+      if (app.globalData.userInfo) {
           this.setData({
               userInfo: app.globalData.userInfo,
               hasUserInfo: true
           })
 
-          this.addUser(app.globalData.userInfo)
+          //this.addUser(app.globalData.userInfo)
       } else if (this.data.canIUse) {
           // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
           // 所以此处加入 callback 以防止这种情况
@@ -31,7 +31,7 @@ Page({
                   hasUserInfo: true
               })
 
-              this.addUser(res.userInfo)
+              //this.addUser(res.userInfo)
           }
       } else {
           // 在没有 open-type=getUserInfo 版本的兼容处理
@@ -44,7 +44,7 @@ Page({
                       hasUserInfo: true
                   })
 
-                  this.addUser(app.globalData.userInfo)
+                  //this.addUser(app.globalData.userInfo)
               }
           })
       }
@@ -59,32 +59,32 @@ Page({
               hasUserInfo: true
           })
 
-          this.addUser(app.globalData.userInfo)
+          //this.addUser(app.globalData.userInfo)
 
           // wx.switchTab({ url: '/pages/index/index' })
       }
   },
 
   async addUser (user) {
-      if (app.globalData.hasUser) {
-          return
-      }
+      // if (app.globalData.hasUser) {
+      //     return
+      // }
 
       // 获取数据库实例
-      const db = wx.cloud.database({})
+      // const db = wx.cloud.database({})
 
-      // 插入用户信息
-      let result = await db.collection('users').add({
-          data: {
-              nickName: user.nickName,
-              albums: []
-          }
-      })
+      // // 插入用户信息
+      // let result = await db.collection('users').add({
+      //     data: {
+      //         nickName: user.nickName,
+      //         albums: []
+      //     }
+      // })
 
       // 在此插入储存用户代码
 
-      app.globalData.nickName = user.nickName
-      app.globalData.id = result._id
+      // app.globalData.nickName = user.nickName
+      // app.globalData.id = result._id
   },
 
   /**
