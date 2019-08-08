@@ -5,13 +5,16 @@ cloud.init({
 })
 
 const db = cloud.database();
+const _ = db.command;
 
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()  
   
   try {
-    return await db.collection('users').skip(event.offset).limit(event.limit).get()
+    return await db.collection('users').where({
+      openid: _.neq(wxContext.OPENID)
+    }).skip(event.offset).limit(event.limit).get()
   } catch(e) {
     console.error(e)
   }

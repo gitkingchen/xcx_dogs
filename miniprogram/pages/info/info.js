@@ -10,7 +10,6 @@ Page({
     //提交的元素
     form:{
       nickname:'',
-      wxnumber:'',
       date:'1990-01-01',
       weight:'',
       star:'',
@@ -19,6 +18,7 @@ Page({
       stay:[],
       hobbyVal: '请选择',
     },
+    isAdd:true,
     //提交的元素
     
     //配置项
@@ -75,7 +75,7 @@ Page({
     const fileList = this.data.fileList;
     var paths = e.detail.tempFilePaths;
 
-    for (const tempFilePath of paths) {
+    for (let tempFilePath of paths) {
         fileList.push({
             url: tempFilePath
         })
@@ -101,11 +101,11 @@ Page({
     var fileList = this.data.fileList.filter((p, idx) => idx !== index);
     this.setData({ fileList });
   },
-  // bindDateChange: function (e) {
-  //   this.setData({
-  //     'form.date': e.detail.value
-  //   })
-  // },
+  bindDateChange: function (e) {
+    this.setData({
+      'form.date': e.detail.value
+    })
+  },
   // bindHeightChange: function (e) {
   //   //this.data.heightIndex = e.detail.value;
   //   this.setData({
@@ -140,10 +140,45 @@ Page({
   // },
   
   uploadPhoto (filePath) {
-      return wx.cloud.uploadFile({
-          cloudPath: `${Date.now()}-${Math.floor(Math.random(0, 1) * 10000000)}.png`,
-          filePath
-      });
+      console.log('filePath',filePath)
+      if(!/^cloud:\/\//.test(filePath)){
+        return wx.cloud.uploadFile({
+            cloudPath: `${Date.now()}-${Math.floor(Math.random(0, 1) * 10000000)}.png`,
+            filePath
+        });  
+      }
+  },
+  async editInfo(photos,params){
+    try {
+      
+      const res = await wx.cloud.callFunction({
+        name: 'editInfo',
+        data: {
+          fileID:photos.map(photo => {return photo.fileID}),
+          baseInfo:params
+        }
+      })
+
+      this.$wuxLoading.hide();
+
+      if(res.result.ret){
+        wx.showToast({
+          title: '更新信息成功，请继续浏览吧~',
+          icon: 'none'
+        })
+      }else{
+        wx.showToast({
+          title: res.result.msg,
+          icon: 'none'
+        })
+      }
+    
+    } catch (err) {
+      wx.showToast({
+        title: '更新信息失败，请告知开发小哥哦~',
+        icon: 'none'
+      })
+    }
   },
   async addInfo (photos,params) {
     try {
@@ -227,20 +262,26 @@ Page({
 
   },
   onSubmit:function(){//提交,判断添加还是编辑
-    this.$wuxLoading.show({
-        text: '数据加载中',
-    });
+    
     const { getFieldsValue, getFieldValue, setFieldsValue } = $wuxForm();
     const params = getFieldsValue();
     console.log(params)
-    // return;
+    //return;
+    this.$wuxLoading.show({
+        text: '数据加载中',
+    });
     // var params = e.detail.value;
     // params['hobbyVal'] = this.data.form.hobbyVal;
     //params['height'] = this.data.heightArr[this.data.heightIndex];
     //console.log('params',params)
     const uploadTasks = this.data.fileList.map(item => this.uploadPhoto(item.url));
+    console.log('uploadTasks',uploadTasks)
     Promise.all(uploadTasks).then(photos => {
-        this.addInfo(photos,params);
+        if(this.data.isAdd){
+          this.addInfo(photos,params);
+        }else{
+          this.editInfo(photos,params);
+        }
         setTimeout(()=>{
           wx.switchTab({
             url: '../dogs/dogs'
@@ -258,9 +299,36 @@ Page({
    */
   onLoad: function (options) {
     this.$wuxLoading = $wuxLoading();
-    // wx.switchTab({ test
-    //   url: '../dogs/dogs'
-    // })
+    this.getInfo();
+  },
+
+  async getInfo(){
+    this.$wuxLoading.show({
+        text: '数据加载中',
+    });
+
+    const res = await wx.cloud.callFunction({
+      name: 'getDetail',
+    })
+    
+    console.log('detailres',res)
+    var detailInfo = res.result.data;//正常情况只返回单条数据
+    if(detailInfo.length > 0){//编辑，渲染
+      this.data.isAdd = false;
+      this.data.form = detailInfo[0].baseInfo;
+      var fileIDs = detailInfo[0].fileID;
+      for (let url of fileIDs) {
+          this.data.fileList.push({url})
+      }
+
+      this.setData({
+        form:this.data.form,
+        fileList:this.data.fileList
+      })
+    }
+    
+
+    this.$wuxLoading.hide();
   },
 
   /**

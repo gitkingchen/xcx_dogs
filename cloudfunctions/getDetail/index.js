@@ -12,7 +12,7 @@ exports.main = async (event, context) => {
   
   try {
     return await db.collection('users').where({
-      openid:event.id
+      openid:event.id || wxContext.OPENID
     }).get()
   } catch(e) {
     console.error(e)

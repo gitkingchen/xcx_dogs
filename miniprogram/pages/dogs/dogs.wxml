@@ -1,24 +1,6 @@
 <view style="{{ pageStyle }}">
-	<!-- <wux-filterbar items="{{ items }}" bind:change="onChange" bind:open="onOpen" bind:close="onClose" /> -->
-	<!-- <wux-refresher id="wux-refresher" bind:refresh="onRefresh">
-		<wux-wing-blank size="default" wx:for="{{dogs}}" wx:key="_id">
-	        <wux-card wux-class="card-demo" title="{{item.baseInfo.nickname}}|{{item.baseInfo.nickname}}|{{item.baseInfo.nickname}}" extra="额外内容" thumb="{{item.fileID[0]}}" bindtap="openDetail" data-id="{{item._openid}}">
-	            <view slot="body">卡片内容</view>
-	            <view slot="footer">尾部内容</view>
-	        </wux-card>
-	    </wux-wing-blank>
-	</wux-refresher> -->
-	<!--没有用官方的加载更多-->
+	<wux-filterbar items="{{ filterItems }}" bind:change="onChange" bind:open="onOpen" bind:close="onClose" />
 	<view>
-	<!-- <wux-refresher id="wux-refresher" > -->
-		<!-- <view class="weui-panel weui-panel_access">
-	        <view class="weui-panel__bd">
-	            <view class="weui-media-box weui-media-box_text" wx:for="{{ items }}" wx:key="">
-	                <view class="weui-media-box__title weui-media-box__title_in-text">{{ item.title }}</view>
-	                <view class="weui-media-box__desc">{{ item.content }}</view>
-	            </view>
-	        </view>
-	    </view> -->
 	    <wux-wing-blank size="default" wx:for="{{dogs}}" wx:key="_id">
 	        <wux-card wux-class="card-demo" title="{{item.baseInfo.nickname}}|{{item.baseInfo.nickname}}|{{item.baseInfo.nickname}}" extra="额外内容" thumb="{{item.fileID[0]}}" bindtap="openDetail" data-id="{{item.openid}}">
 	            <view slot="body">卡片内容</view>
@@ -26,7 +8,6 @@
 	        </wux-card>
 	    </wux-wing-blank>
 	    <view hidden="{{!noData}}">没有更多数据</view>
-	<!-- </wux-refresher> -->
 	</view>
 	<wux-loading id="wux-loading" />
 </view>

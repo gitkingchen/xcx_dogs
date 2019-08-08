@@ -17,14 +17,14 @@
             <text>上传</text>
         </wux-upload>
     	<!-- <wux-cell-group title="带图标、说明的列表项"> -->
-            <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="标题文字">
+            <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="昵称">
             	<view slot="footer">
-                    <wux-field name="nickname">
+                    <wux-field name="nickname" initialValue="{{ form.nickname }}">
                         <wux-input/>
                     </wux-field>
                 </view>
             </wux-cell>
-            <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="标题文字">
+            <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="爱好">
                 <view slot="footer">
                     <wux-field name="hobbyVal" initialValue="{{ form.hobbyVal }}">
                         <wux-popup-select multiple options="{{ hobbyOpts }}" bind:change="hobbyChange">
@@ -33,19 +33,16 @@
                     </wux-field>
                 </view>
             </wux-cell>
-            <!-- <wux-cell extra="{{ popupSelect }}"></wux-cell> -->
-            <!-- <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="爱好" extra="{{ form.hobbyVal }}" bind:click="hobbyChange">
+            <!-- <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="生日">
+                <view slot="footer">
+                    <wux-field name="date" initialValue="{{ form.date }}">
+                        <picker mode="date" value="{{form.date}}" bindchange="bindDateChange">
+                            {{form.date}}
+                        </picker>
+                    </wux-field>
+                </view>
             </wux-cell> -->
-            <!-- <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="标题文字">
-            	<view slot="footer"><input name="wxnumber" type="text" style="text-align:left;" placeholder="hao" /></view>
-            </wux-cell> -->
-            <!-- <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="sheng">
-            	<view slot="footer">
-    	        	<picker name="date" mode="date" value="{{form.date}}" bindchange="bindDateChange">
-    				    {{form.date}}
-    				</picker>
-    			</view>
-            </wux-cell>
+            <!-- 
             <wux-cell thumb="https://s.gravatar.com/avatar/d4a2f12ceae3b7f211b661576d22bfb9?size=100&default=retro" title="gao">
             	<view slot="footer">
     	        	<picker name="height" value="{{heightIndex}}" mode="selector" range="{{heightArr}}" bindchange="bindHeightChange">
